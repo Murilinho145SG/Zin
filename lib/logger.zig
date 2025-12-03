@@ -53,7 +53,7 @@ pub const Logger = struct {
             const year = epoch.getEpochDay().calculateYearDay().year;
             const day = epoch.getEpochDay().calculateYearDay().calculateMonthDay().day_index + 1;
             const month = epoch.getEpochDay().calculateYearDay().calculateMonthDay().month.numeric();
-            const hour = epoch.getDaySeconds().getHoursIntoDay() - 3;
+            const hour = epoch.getDaySeconds().getHoursIntoDay();
             const min = epoch.getDaySeconds().getMinutesIntoHour();
             const sec = epoch.getDaySeconds().getSecondsIntoMinute();
 

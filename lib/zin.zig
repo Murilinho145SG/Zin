@@ -15,6 +15,9 @@ pub const Context = struct {
     status_header: http.Status = .ok,
     body: []const u8 = "",
     remote_ip: net.Ip4Address,
+    uri: []const u8 = "",
+    method: http.Method,
+    params: std.StringHashMap([]const u8),
 
     pub fn status(self: *Context, code: http.Status) void {
         self.status_header = code;
@@ -102,7 +105,15 @@ pub const Engine = struct {
         const client_addr_data = client_addr.any.data;
         const client_ip = try std.fmt.allocPrint(arena, "{d}.{d}.{d}.{d}", .{ client_addr_data[2], client_addr_data[3], client_addr_data[4], client_addr_data[5] });
 
-        var ctx = Context{ .req = &req, .allocator = arena, .body = "", .remote_ip = client_addr.in };
+        var ctx = Context{
+            .req = &req,
+            .allocator = arena,
+            .body = "",
+            .remote_ip = client_addr.in,
+            .uri = "",
+            .method = req.head.method,
+            .params = std.StringHashMap([]const u8).init(arena),
+        };
         if (self.routes.get(method_path)) |handler| {
             try handler(&ctx);
         } else {
