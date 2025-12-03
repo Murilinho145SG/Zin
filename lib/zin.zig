@@ -23,7 +23,7 @@ pub const Context = struct {
         self.status_header = code;
     }
 
-    fn write(self: *Context, content: []const u8) void {
+    pub fn write(self: *Context, content: []const u8) void {
         self.body = content;
     }
 
